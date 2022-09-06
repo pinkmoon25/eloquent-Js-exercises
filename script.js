@@ -1,3 +1,4 @@
+const Scripts = require('./data/scriptObject');
 //chapter functions Exercises
 
 //find minimum
@@ -101,7 +102,7 @@ function flatten(array){
   return array.reduce((a=[], b)=> a.concat(b))
 };
 
-//every() array method
+//every() array method using for loop
 function every(array, callback){
   let check = 0;
   for (let item of array) {
@@ -110,3 +111,73 @@ function every(array, callback){
   if(check == array.length) return true;
   else return false;
 };
+
+//every() array method using method some()
+function everyWithSome(array, callback){
+    if(array.some((item) => !callback(item))) return false;
+    else return true;
+};
+
+//your own for loop
+function loop(n, test, update, mainFunction){
+  for(let i=n; i>0; i--){
+    if(test(i)) {
+      mainFunction(i)
+      update(n)
+    }
+    else return false
+  }
+};
+
+
+//function that computes dominant direction in a string of text
+//run in node to check
+function writingDirection(text) {
+  let direction = '';
+  const scriptNames = [];
+  let count=1;
+  const countArr = [];
+  for(let element of text){
+    const char = element.codePointAt(0);
+    for(let script of Scripts){
+      if(script.ranges.some(([from, to])=>{
+        return char>=from && char < to;
+      })){
+        scriptNames.push(script.name);
+      }
+    }
+  }
+  scriptNames.map((char, index)=>{
+    if(char === scriptNames[index + 1]){
+      count ++;
+    }
+    else{
+      countArr.push({name: char, count})
+      count = 1
+    }
+  });
+
+  for(let i=0;i<countArr.length;i++){
+    for(let j=i+1;j<countArr.length;j++){
+    if(countArr[i].name===countArr[j].name){
+      countArr[i].count+=countArr[j].count;
+      countArr.splice(countArr.indexOf(countArr[j]), 1)
+    }
+    } 
+  }
+  let max = countArr[0].count
+  let result = countArr.filter(x => {
+    if(x.count > max) max = x.count
+    return x.count == max;    
+  })
+  for(let item of result){
+   direction = Scripts.filter(script=>{
+    if(item.name == script.name){
+      return script.direction 
+    }  
+  })
+  }
+  return direction[0].direction;
+};
+
+console.log(writingDirection('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
