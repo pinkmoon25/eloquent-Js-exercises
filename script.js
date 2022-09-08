@@ -183,8 +183,8 @@ function writingDirection(text) {
 // console.log(writingDirection('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
 
 //chapter "The secret life of objects"
-//Vector class
 
+//Vector class
 class Vector{
   constructor(x, y){
     this.x = x;
@@ -205,6 +205,27 @@ class Vector{
   }
 };
 
-console.log(new Vector(1, 2).plus(new Vector(2, 3)));
-console.log(new Vector(1, 2).minus(new Vector(2, 3)));
-console.log(new Vector(3, 4).length);
+//Create Group class with functionalities of "Set" data structure
+class Group {
+  constructor(){
+    this.content = []
+  }
+  add(value){
+    if(this.content.every(x => x !== value)) this.content.push(value);
+  }
+
+  delete(value){
+    return this.content =  this.content.filter(x => x !== value);
+  }
+
+  has(value){
+    return this.content.some(x => x === value);
+  }
+  static from(value){
+    let group = new Group;
+    for(let element of value){
+      group.add(element);
+    }
+    return group;
+  }
+};
