@@ -180,4 +180,31 @@ function writingDirection(text) {
   return direction[0].direction;
 };
 
-console.log(writingDirection('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
+// console.log(writingDirection('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
+
+//chapter "The secret life of objects"
+//Vector class
+
+class Vector{
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+  }
+
+  plus({x, y}){
+    return new Vector(x+this.x, y+this.y);
+  }
+  
+  minus({x, y}){
+    return new Vector(this.x-x, this.y-y);
+  }
+
+  get length(){
+    let distance = Math.sqrt(this.x*this.x + this.y*this.y);
+    return distance;
+  }
+};
+
+console.log(new Vector(1, 2).plus(new Vector(2, 3)));
+console.log(new Vector(1, 2).minus(new Vector(2, 3)));
+console.log(new Vector(3, 4).length);
