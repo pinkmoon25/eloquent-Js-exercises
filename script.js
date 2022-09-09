@@ -228,4 +228,23 @@ class Group {
     }
     return group;
   }
+
+  [Symbol.iterator] = ()=> new IterableGroup(this);
+
 };
+//iterable group class
+class IterableGroup{
+  constructor(group){
+    this.group = group;
+    this.size = 0;
+  }
+
+  next(){
+    if(this.size >= this.group.content.length) return {done: true};
+    else {
+      let result = {value: this.group.content[this.size], done: false}
+      this.size++;
+      return result;
+    }    
+  }
+}
