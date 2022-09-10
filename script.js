@@ -77,11 +77,22 @@ function sum(arr){
 //reverse array
 function reverseArray(arr){
   let result = [];
-  let n = arr.length;
-  for(let i = n-1; i>=0; i--){
+  for(let i = arr.length-1; i>=0; i--){
     result.push(arr[i]);   
   }
-  arr = arr.slice(n).concat(result);
+  return result;
+};
+
+//modify and reverse a given array
+function reverseGivenArr(arr){
+  let n = arr.length
+  let count = 0;
+  for(let i=n-1; i>=Math.floor(n/2); i--){
+    let temp = arr[count];
+    arr[count] = arr[i];
+    arr[i] = temp;
+    count++;
+  }
   return arr;
 };
 
