@@ -259,3 +259,28 @@ class IterableGroup{
     }    
   }
 }
+
+//Project: A robot
+const roads = [
+  "Alice_house-Bob_house", "Alice_house-Cabin", "Alice_house-Post_Office", "Bob_house-Town_hall",
+  "Daria_house-Ernie_house", "Daria_house-Town_hall", "Ernie_house-Grete_house", "Grete_house-Farm",
+  "Grete_house-Shop", "Market-Farm", "Market-Post_Office", "Market-Shop",
+  "Market-Town_hall", "Shop-Town_hall"
+];
+
+function buildGraph(edges){
+  const graph = Object.create(null);
+  function addEdge(from, to){
+    if(graph[from] == null) graph[from] = [to];
+    else graph[from].push(to);
+  }
+  for(let edge of edges){
+    [start, end] = edge.split('-');
+    addEdge(start, end);
+    addEdge(end, start);
+  }
+  return graph;
+}
+
+const roadGraph = buildGraph(roads);
+console.log(roadGraph);
