@@ -284,7 +284,7 @@ function buildGraph(edges){
 }
 
 const roadGraph = buildGraph(roads);
-console.log(roadGraph);
+// console.log(roadGraph);
 
 //village state : robot's location, parcels(parcel's location, parcel's destination)
 class VillageState {
@@ -314,5 +314,43 @@ let first = new VillageState(
 
 let next = first.moveAndDeliver("Alice_House");
 
-console.log(first);
-console.log(next);
+// console.log(first);
+// console.log(next);
+
+//random robot simulation
+function randomPick(array){
+  return array[Math.floor(Math.random()*array.length)];
+}
+
+function randomRobot(state){                                    //no memory for random bot
+  return {direction: randomPick(roadGraph[state.robLocation])}
+}
+
+function sendRobot(state, robot, memory){
+  for(let turns = 0;;turns++){
+    if(state.parcels.length === 0){
+      console.log(`Finished in ${turns} turns`);
+      break;
+    }
+    let robAction = robot(state, memory); 
+    state = state.moveAndDeliver(robAction.direction);
+    memory = robAction.memory;
+    console.log(`parcel at ${JSON.stringify(state.parcels)}`, `Moved to ${robAction.direction}`);
+  }
+}
+
+//create state with random packages
+VillageState.random = (parcelCount = 5) => {
+  let parcelToDeliever = [];
+  for(let i=0; i< parcelCount; i++){
+    let addressTo = randomPick(Object.keys(roadGraph));
+    let currLocation;
+    do{
+      currLocation = randomPick(Object.keys(roadGraph));
+    } while(currLocation == addressTo);
+    parcelToDeliever.push({currLocation, addressTo});
+  }
+  return new VillageState('Post_Office', parcelToDeliever);
+}
+
+console.log(sendRobot(VillageState.random(), randomRobot));
