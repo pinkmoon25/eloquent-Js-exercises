@@ -261,10 +261,11 @@ class IterableGroup{
 }
 
 //Project: A robot
+//village roads connection
 const roads = [
-  "Alice_house-Bob_house", "Alice_house-Cabin", "Alice_house-Post_Office", "Bob_house-Town_hall",
-  "Daria_house-Ernie_house", "Daria_house-Town_hall", "Ernie_house-Grete_house", "Grete_house-Farm",
-  "Grete_house-Shop", "Market-Farm", "Market-Post_Office", "Market-Shop",
+  "Alice_house-Bob_House", "Alice_House-Cabin", "Alice_House-Post_Office", "Bob_House-Town_hall",
+  "Daria_House-Ernie_House", "Daria_House-Town_hall", "Ernie_House-Grete_House", "Grete_House-Farm",
+  "Grete_House-Shop", "Market-Farm", "Market-Post_Office", "Market-Shop",
   "Market-Town_hall", "Shop-Town_hall"
 ];
 
@@ -284,3 +285,34 @@ function buildGraph(edges){
 
 const roadGraph = buildGraph(roads);
 console.log(roadGraph);
+
+//village state : robot's location, parcels(parcel's location, parcel's destination)
+class VillageState {
+  constructor(robLocation, parcels){
+    this.robLocation = robLocation;
+    this.parcels = parcels;
+  }
+  moveAndDeliver(destination){
+    if(roadGraph[this.robLocation].includes(destination)){
+      let parcels = this.parcels.map(p => {
+        if(p.currLocation != this.robLocation) return p;
+        else {
+          return{currLocation: destination, addressTo: p.addressTo}
+        }
+      }).filter(p => p.currLocation != p.addressTo);
+
+      return new VillageState(destination, parcels);
+    }
+    else return this;
+  }
+}
+
+let first = new VillageState(
+  "Post_Office",
+  [{currLocation: "Post_Office", addressTo: "Alice_House"}]
+);
+
+let next = first.moveAndDeliver("Alice_House");
+
+console.log(first);
+console.log(next);
