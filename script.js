@@ -263,7 +263,7 @@ class IterableGroup{
 //Project: A robot
 //village roads connection
 const roads = [
-  "Alice_house-Bob_House", "Alice_House-Cabin", "Alice_House-Post_Office", "Bob_House-Town_hall",
+  "Alice_House-Bob_House", "Alice_House-Cabin", "Alice_House-Post_Office", "Bob_House-Town_hall",
   "Daria_House-Ernie_House", "Daria_House-Town_hall", "Ernie_House-Grete_House", "Grete_House-Farm",
   "Grete_House-Shop", "Market-Farm", "Market-Post_Office", "Market-Shop",
   "Market-Town_hall", "Shop-Town_hall"
@@ -335,7 +335,7 @@ function sendRobot(state, robot, memory){
     let robAction = robot(state, memory); 
     state = state.moveAndDeliver(robAction.direction);
     memory = robAction.memory;
-    console.log(`parcel at ${JSON.stringify(state.parcels)}`, `Moved to ${robAction.direction}`);
+    console.log(`Moved to ${robAction.direction}`);
   }
 }
 
@@ -354,3 +354,20 @@ VillageState.random = (parcelCount = 5) => {
 }
 
 console.log(sendRobot(VillageState.random(), randomRobot));
+
+//A mail route starting from the post office
+const mailRoute = [
+  "Alice_House", "Cabin", "Alice_House", "Bob_House",
+  "Town_hall", "Daria_House", "Ernie_House",
+  "Grete_House", "Shop", "Grete_House", "Farm",
+  "Market", "Post_Office"
+];
+
+function mailRouteRobot(state, memory){  //keeps track of memory at every turn
+  if(memory.length == 0) {
+    memory = mailRoute;
+  }
+  return { direction: memory[0], memory: memory.slice(1) }
+};
+
+console.log(sendRobot(VillageState.random(), mailRouteRobot, []));
